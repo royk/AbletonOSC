@@ -20,7 +20,6 @@ class SongHandler(AbletonOSCHandler):
         for method in [
             "capture_midi",
             "continue_playing",
-            "create_audio_track",
             "create_midi_track",
             "create_return_track",
             "create_scene",
@@ -42,6 +41,16 @@ class SongHandler(AbletonOSCHandler):
         ]:
             callback = partial(self._call_method, self.song, method)
             self.osc_server.add_handler("/live/song/%s" % method, callback)
+            def create_track_callback(params):
+                track = self.song.create_audio_track()
+                track_index = 0
+                for index, value in enumerate(self.song.tracks):
+                    if value == track:
+                        track_index = index
+                        break
+                self.logger.info("create track callback: %s" % track_index)
+                return (track_index,)
+            self.osc_server.add_handler("/live/song/create_audio_track", create_track_callback)
 
         #--------------------------------------------------------------------------------
         # Callbacks for Song: properties (read/write)
