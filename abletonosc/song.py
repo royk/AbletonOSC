@@ -90,6 +90,16 @@ class SongHandler(AbletonOSCHandler):
         #--------------------------------------------------------------------------------
         self.osc_server.add_handler("/live/song/get/num_tracks", lambda _: (len(self.song.tracks),))
 
+        def song_get_track_selection(params):
+            if len(params) == 0:
+                track_index_min, track_index_max = 0, len(self.song.tracks)
+            else:
+                track_index_min, track_index_max = params
+                if track_index_max == -1:
+                    track_index_max = len(self.song.tracks)
+            return tuple(self.song.tracks[index].is_part_of_selection for index in range(track_index_min, track_index_max))
+        self.osc_server.add_handler("/live/song/get/track_selection", song_get_track_selection)
+
         def song_get_track_names(params):
             if len(params) == 0:
                 track_index_min, track_index_max = 0, len(self.song.tracks)
