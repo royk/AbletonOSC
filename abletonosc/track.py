@@ -43,6 +43,7 @@ class TrackHandler(AbletonOSCHandler):
             "is_foldable",
             "is_grouped",
             "is_visible",
+            "is_part_of_selection",
             "output_meter_level",
             "output_meter_left",
             "output_meter_right",
