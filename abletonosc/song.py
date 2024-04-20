@@ -58,6 +58,13 @@ class SongHandler(AbletonOSCHandler):
 
             self.osc_server.add_handler("/live/song/unsolo_all_tracks", unsolo_all_tracks_callback)
 
+            def unarm_all_tracks_callback(params):
+                for track in self.song.tracks:
+                    if track.can_be_armed:
+                        track.arm = False
+
+            self.osc_server.add_handler("/live/song/unarm_all_tracks", unarm_all_tracks_callback)
+
         #--------------------------------------------------------------------------------
         # Callbacks for Song: properties (read/write)
         #--------------------------------------------------------------------------------
