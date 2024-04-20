@@ -52,6 +52,12 @@ class SongHandler(AbletonOSCHandler):
                 return (track_index,)
             self.osc_server.add_handler("/live/song/create_audio_track", create_track_callback)
 
+            def unsolo_all_tracks_callback(params):
+                for track in self.song.tracks:
+                    track.solo = False
+
+            self.osc_server.add_handler("/live/song/unsolo_all_tracks", unsolo_all_tracks_callback)
+
         #--------------------------------------------------------------------------------
         # Callbacks for Song: properties (read/write)
         #--------------------------------------------------------------------------------
