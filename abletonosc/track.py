@@ -146,6 +146,16 @@ class TrackHandler(AbletonOSCHandler):
         def track_get_device_types(track, _):
             return tuple(device.type for device in track.devices)
 
+        def track_get_devices_collapsed(params):
+            track = self.song.tracks[params[0]]
+            devices = []
+            for device in track.devices:
+                if device.is_active and device.type==2:
+                    devices.append(device.view.is_collapsed)
+            #for prop in properties:
+            self.logger.info("-" + str(devices))
+            return tuple(devices)
+
         def track_get_device_class_names(track, _):
             return tuple(device.class_name for device in track.devices)
 
@@ -162,6 +172,7 @@ class TrackHandler(AbletonOSCHandler):
         self.osc_server.add_handler("/live/track/get/devices/type", create_track_callback(track_get_device_types))
         self.osc_server.add_handler("/live/track/get/devices/class_name", create_track_callback(track_get_device_class_names))
         self.osc_server.add_handler("/live/track/get/devices/can_have_chains", create_track_callback(track_get_device_can_have_chains))
+        self.osc_server.add_handler("/live/track/get/devices/collapsed", track_get_devices_collapsed)
 
         #--------------------------------------------------------------------------------
         # Track: Output routing.
