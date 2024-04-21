@@ -29,14 +29,14 @@ class Manager(ControlSurface):
 
     def start_logging(self):
         """
-        Start logging to a local logfile (logs/live-advanced-shortcuts.log),
+        Start logging to a local logfile (logs/live-advanced-shortcuts-remote.log),
         and relay error messages via OSC.
         """
         module_path = os.path.dirname(os.path.realpath(__file__))
         log_dir = os.path.join(module_path, "logs")
         if not os.path.exists(log_dir):
             os.mkdir(log_dir, 0o755)
-        log_path = os.path.join(log_dir, "live-advanced-shortcuts.log")
+        log_path = os.path.join(log_dir, "live-advanced-shortcuts-remote.log")
         self.log_file_handler = logging.FileHandler(log_path)
         self.log_file_handler.setLevel(self.log_level.upper())
         formatter = logging.Formatter('(%(asctime)s) [%(levelname)s] %(message)s')
