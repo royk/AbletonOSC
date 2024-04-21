@@ -23,20 +23,20 @@ class Manager(ControlSurface):
         self.start_logging()
         self.init_api()
 
-        self.show_message("AbletonOSC: Listening for OSC on port %d" % abletonosc.OSC_LISTEN_PORT)
-        logger.info("Started AbletonOSC on address %s" % str(self.osc_server._local_addr))
+        self.show_message("Live Advanced Shortcuts: Listening for OSC on port %d" % abletonosc.OSC_LISTEN_PORT)
+        logger.info("Started Live Advanced Shortcuts on address %s" % str(self.osc_server._local_addr))
 
 
     def start_logging(self):
         """
-        Start logging to a local logfile (logs/abletonosc.log),
+        Start logging to a local logfile (logs/live-advanced-shortcuts.log),
         and relay error messages via OSC.
         """
         module_path = os.path.dirname(os.path.realpath(__file__))
         log_dir = os.path.join(module_path, "logs")
         if not os.path.exists(log_dir):
             os.mkdir(log_dir, 0o755)
-        log_path = os.path.join(log_dir, "abletonosc.log")
+        log_path = os.path.join(log_dir, "live-advanced-shortcuts.log")
         self.log_file_handler = logging.FileHandler(log_path)
         self.log_file_handler.setLevel(self.log_level.upper())
         formatter = logging.Formatter('(%(asctime)s) [%(levelname)s] %(message)s')
