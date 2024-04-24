@@ -146,15 +146,29 @@ class TrackHandler(AbletonOSCHandler):
         def track_get_device_types(track, _):
             return tuple(device.type for device in track.devices)
 
-        def track_get_devices_collapsed(params):
+        def track_get_devices_collapsed_state(params):
             track = self.song.tracks[params[0]]
             devices = []
             for device in track.devices:
-                if device.is_active and device.type==2:
-                    devices.append(device.view.is_collapsed)
+                if device.view.is_collapsed==False:
+                    continue
+                devices.append(device.parameters[0].value==1.0)
             #for prop in properties:
             self.logger.info("-" + str(devices))
             return tuple(devices)
+        def track_set_device_solo(params):
+            track = self.song.tracks[params[0]]
+            devices_on_off = params[1:]
+            idx = 0
+            for index, device in enumerate(track.devices):
+                if device.view.is_collapsed==False:
+                    continue
+                #self.logger.info("Setting solo for device %s : %s" % device.name, devices_on_off[idx])
+                if devices_on_off[idx] == 1:
+                    device.parameters[0].value = 1.0
+                else:
+                    device.parameters[0].value = 0.0
+                idx += 1
 
         def track_get_device_class_names(track, _):
             return tuple(device.class_name for device in track.devices)
@@ -172,7 +186,8 @@ class TrackHandler(AbletonOSCHandler):
         self.osc_server.add_handler("/live/track/get/devices/type", create_track_callback(track_get_device_types))
         self.osc_server.add_handler("/live/track/get/devices/class_name", create_track_callback(track_get_device_class_names))
         self.osc_server.add_handler("/live/track/get/devices/can_have_chains", create_track_callback(track_get_device_can_have_chains))
-        self.osc_server.add_handler("/live/track/get/devices/collapsed", track_get_devices_collapsed)
+        self.osc_server.add_handler("/live/track/get/devices/collapsed", track_get_devices_collapsed_state)
+        self.osc_server.add_handler("/live/track/device/set/solo", track_set_device_solo)
 
         #--------------------------------------------------------------------------------
         # Track: Output routing.

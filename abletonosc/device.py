@@ -126,9 +126,10 @@ class DeviceHandler(AbletonOSCHandler):
                 self.logger.warning("No listener function found for property: %s (%s)" % (prop, str(params)))
 
         def device_set_parameter_value(device, params: Tuple[Any] = ()):
+            self.logger.info("device_set_parameter_value callback called with params: %s" % str(params))
             param_index, param_value = params[:2]
             param_index = int(param_index)
-            device.parameters[param_index].value = param_value
+            device.parameters[param_index].value = float(param_value)
 
         def device_get_parameter_name(device, params: Tuple[Any] = ()):
             param_index = int(params[0])
